@@ -34,7 +34,7 @@ const jouer = function() {
     console.log('Vous avez déjà joué : ' + essais.join(', '));
   }
 
-  rl.question('Quel est le nombre ? ', (saisie) => {
+  rl.question('Quel est le nombre ? ', function answerCb(saisie) {
 
     const entierSaisi = Number.parseInt(saisie);
 
