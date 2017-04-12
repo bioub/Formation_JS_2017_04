@@ -5,8 +5,9 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+// 1 - utiliser le raccourci de méthode ES5 comme pour le get
 const Random = {
-  get: function() {
+  get() {
     return Math.random();
   },
   getArbitrary: function(min, max) {
@@ -24,6 +25,11 @@ const Random = {
   }
 };
 
+// 2 - Utiliser le mot-clé class plutot que la fonction constructeur + prototype
+// 3 - utiliser la valeur par défaut pour options
+// 5 - facultatif
+// remplacer options par Destructuring Assignment Object
+// voir : https://simonsmith.io/destructuring-objects-as-function-parameters-in-es6/
 const Jeu = function(options) {
   options = options || {};
   this._min = options.min || 0;
@@ -34,9 +40,11 @@ const Jeu = function(options) {
 
 Jeu.prototype.jouer = function() {
   if (this._essais.length) {
+    // 4 - Utiliser une template string
     console.log('Vous avez déjà joué : ' + this._essais.join(', '));
   }
 
+  // 4 - Utiliser une template string et rajouter min et max dans la question
   rl.question('Quel est le nombre ? ', saisie => {
 
     const entierSaisi = Number.parseInt(saisie);
