@@ -3,8 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>TodoList</title>
+  <style>
+    .todolist-add-form {
+      background-color: yellow;
+    }
+  </style>
 </head>
 <body>
-
+<h2>TodoList</h2>
+<div class="todolist">
+  <div class="todolist-add">
+    <form class="todolist-add-form">
+      <input type="text" name="todo">
+      <button type="submit">+</button>
+    </form>
+  </div>
+  <div class="todolist-list"></div>
+</div>
+<script src="dist/bundle.js"></script>
 </body>
 </html>
