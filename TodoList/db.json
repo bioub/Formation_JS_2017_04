@@ -1,0 +1,15 @@
+{
+  "todos": [{
+    "id": 1,
+    "content": "Exercice sur le DOM",
+    "done": true
+  },{
+    "id": 2,
+    "content": "Remplir la feuille d'évaluation",
+    "done": false
+  },{
+    "id": 3,
+    "content": "Faire des requêtes AJAX",
+    "done": true
+  }]
+}
