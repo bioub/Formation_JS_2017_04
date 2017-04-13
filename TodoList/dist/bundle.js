@@ -73,32 +73,32 @@
 "use strict";
 
 
+var _requetes = __webpack_require__(1);
+
 var formAddElt = document.querySelector('.todolist-add-form');
 var listElt = document.querySelector('.todolist-list');
 var checkboxToggleElt = document.querySelector('.todolist-toggle');
 
-/*
-const deleteCb = function (e) {
-  e.currentTarget.parentNode.parentNode.removeChild(
-    e.currentTarget.parentNode
-  );
-};
-*/
-
-formAddElt.addEventListener('submit', function submitCb(e) {
-  e.preventDefault();
-  // e.currentTarget; // l'élément qui a déclenché cet Event (ici c'est le form)
-  var saisi = formAddElt.todo.value;
+var ajouterTodo = function ajouterTodo() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$id = _ref.id,
+      id = _ref$id === undefined ? 0 : _ref$id,
+      _ref$content = _ref.content,
+      content = _ref$content === undefined ? '' : _ref$content,
+      _ref$done = _ref.done,
+      done = _ref$done === undefined ? false : _ref$done;
 
   var divElt = document.createElement('div');
   //divElt.className = 'todolist-row';
   divElt.classList.add('todolist-row'); // PAS IE8
-  divElt.innerHTML = '<b>' + saisi + '</b>';
+  divElt.innerHTML = '<b>' + content + '</b>';
+  divElt.dataset.id = id;
 
   // Checkbox
   var checkboxElt = document.createElement('input');
   checkboxElt.type = 'checkbox';
   checkboxElt.className = 'todolist-done';
+  checkboxElt.checked = done;
   divElt.insertBefore(checkboxElt, divElt.firstElementChild);
 
   // Bouton Moins
@@ -114,20 +114,25 @@ formAddElt.addEventListener('submit', function submitCb(e) {
   } else {
     listElt.appendChild(divElt);
   }
-});
+};
 
-checkboxToggleElt.addEventListener('change', function toggleAllCb() {
-  var checkboxes = listElt.querySelectorAll('.todolist-done');
+// 1 - Faire la requete DELETE http://localhost:3000/todos/1
+// au clic du bouton moins
+// 2 - A l'ajout faire la req POST http://localhost:3000/todos
+// Dans la requete ajouter le header Content-type: application/json
+// xhr.send(json)
 
+
+(0, _requetes.getContactList)(function (todos) {
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
   var _iteratorError = undefined;
 
   try {
-    for (var _iterator = checkboxes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var checkbox = _step.value;
+    for (var _iterator = todos[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var todo = _step.value;
 
-      checkbox.checked = checkboxToggleElt.checked;
+      ajouterTodo(todo);
     }
   } catch (err) {
     _didIteratorError = true;
@@ -145,6 +150,53 @@ checkboxToggleElt.addEventListener('change', function toggleAllCb() {
   }
 });
 
+/*
+const deleteCb = function (e) {
+  e.currentTarget.parentNode.parentNode.removeChild(
+    e.currentTarget.parentNode
+  );
+};
+*/
+
+formAddElt.addEventListener('submit', function submitCb(e) {
+  e.preventDefault();
+  // e.currentTarget; // l'élément qui a déclenché cet Event (ici c'est le form)
+  var saisi = formAddElt.todo.value;
+
+  ajouterTodo({
+    content: saisi
+  });
+});
+
+checkboxToggleElt.addEventListener('change', function toggleAllCb() {
+  var checkboxes = listElt.querySelectorAll('.todolist-done');
+
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
+
+  try {
+    for (var _iterator2 = checkboxes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var checkbox = _step2.value;
+
+      checkbox.checked = checkboxToggleElt.checked;
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        _iterator2.return();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
+    }
+  }
+});
+
 // 1 - Ajouter un bouton - sur chaque ligne
 // * écouter l'événement click
 // * Element.prototype.removeChild()
@@ -155,6 +207,29 @@ checkboxToggleElt.addEventListener('change', function toggleAllCb() {
 // * Au click de la checkbox générale tout cocher/décocher
 // * ParentNode.prototype.querySelectorAll() (retourne un NodeList (pas un Array))
 // * HTMLInputElement.checked = true (ou false pour décocher)
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var getContactList = exports.getContactList = function getContactList(cb) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'http://localhost:3000/todos');
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
+      var todos = JSON.parse(xhr.responseText);
+
+      cb(todos);
+    }
+  };
+  xhr.send();
+};
 
 /***/ })
 /******/ ]);

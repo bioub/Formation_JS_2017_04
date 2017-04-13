@@ -1,31 +1,23 @@
 'use strict';
 
+import {getContactList} from './requetes';
+
 const formAddElt = document.querySelector('.todolist-add-form');
 const listElt = document.querySelector('.todolist-list');
 const checkboxToggleElt = document.querySelector('.todolist-toggle');
 
-/*
-const deleteCb = function (e) {
-  e.currentTarget.parentNode.parentNode.removeChild(
-    e.currentTarget.parentNode
-  );
-};
-*/
-
-formAddElt.addEventListener('submit', function submitCb(e) {
-  e.preventDefault();
-  // e.currentTarget; // l'élément qui a déclenché cet Event (ici c'est le form)
-  const saisi = formAddElt.todo.value;
-
+const ajouterTodo = function({id = 0, content = '', done = false} = {}) {
   const divElt = document.createElement('div');
   //divElt.className = 'todolist-row';
   divElt.classList.add('todolist-row'); // PAS IE8
-  divElt.innerHTML = `<b>${saisi}</b>`;
+  divElt.innerHTML = `<b>${content}</b>`;
+  divElt.dataset.id = id;
 
   // Checkbox
   const checkboxElt = document.createElement('input');
   checkboxElt.type = 'checkbox';
   checkboxElt.className = 'todolist-done';
+  checkboxElt.checked = done;
   divElt.insertBefore(checkboxElt, divElt.firstElementChild);
 
   // Bouton Moins
@@ -42,6 +34,40 @@ formAddElt.addEventListener('submit', function submitCb(e) {
   else {
     listElt.appendChild(divElt);
   }
+};
+
+// 1 - Faire la requete DELETE http://localhost:3000/todos/1
+// au clic du bouton moins
+// 2 - A l'ajout faire la req POST http://localhost:3000/todos
+// Dans la requete ajouter le header Content-type: application/json
+// xhr.send(json)
+
+
+getContactList(function(todos) {
+  for (let todo of todos) {
+    ajouterTodo(todo);
+  }
+});
+
+
+/*
+const deleteCb = function (e) {
+  e.currentTarget.parentNode.parentNode.removeChild(
+    e.currentTarget.parentNode
+  );
+};
+*/
+
+
+
+formAddElt.addEventListener('submit', function submitCb(e) {
+  e.preventDefault();
+  // e.currentTarget; // l'élément qui a déclenché cet Event (ici c'est le form)
+  const saisi = formAddElt.todo.value;
+
+  ajouterTodo({
+    content: saisi
+  });
 });
 
 checkboxToggleElt.addEventListener('change', function toggleAllCb() {
