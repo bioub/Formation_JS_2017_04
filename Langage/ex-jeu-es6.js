@@ -10,15 +10,15 @@ const Random = {
   get() {
     return Math.random();
   },
-  getArbitrary: function(min, max) {
+  getArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
   },
-  getInt: function(min, max) {
+  getInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   },
-  getIntInclusive: function(min, max) {
+  getIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -30,50 +30,52 @@ const Random = {
 // 5 - facultatif
 // remplacer options par Destructuring Assignment Object
 // voir : https://simonsmith.io/destructuring-objects-as-function-parameters-in-es6/
-const Jeu = function(options) {
-  options = options || {};
-  this._min = options.min || 0;
-  this._max = options.max || 100;
-  this._entierAlea = Random.getIntInclusive(this._min, this._max);
-  this._essais = [];
-};
-
-Jeu.prototype.jouer = function() {
-  if (this._essais.length) {
-    // 4 - Utiliser une template string
-    console.log('Vous avez déjà joué : ' + this._essais.join(', '));
+class Jeu {
+  constructor({min = 0, max = 100} = {}) {
+    this._min = min;
+    this._max = max;
+    this._entierAlea = Random.getIntInclusive(this._min, this._max);
+    this._essais = [];
   }
 
-  // 4 - Utiliser une template string et rajouter min et max dans la question
-  rl.question('Quel est le nombre ? ', saisie => {
-
-    const entierSaisi = Number.parseInt(saisie);
-
-    if (Number.isNaN(entierSaisi)) {
-      console.log('Erreur : il faut saisir un nombre');
-      return this.jouer();
+  jouer() {
+    if (this._essais.length) {
+      // 4 - Utiliser une template string
+      console.log(`Vous avez déjà joué : ${this._essais.join(', ')}`);
     }
 
-    this._essais.push(entierSaisi);
+    // 4 - Utiliser une template string et rajouter min et max dans la question
+    rl.question(`Saisir un entier entre ${this._min} et ${this._max} : `, saisie => {
 
-    if (entierSaisi < this._entierAlea) {
-      console.log('Trop petit');
-      return this.jouer();
-    }
+      const entierSaisi = Number.parseInt(saisie);
 
-    if (entierSaisi > this._entierAlea) {
-      console.log('Trop grand');
-      return this.jouer();
-    }
+      if (Number.isNaN(entierSaisi)) {
+        console.log('Erreur : il faut saisir un nombre');
+        return this.jouer();
+      }
 
-    console.log('Gagné');
-    rl.close();
-  });
-};
+      this._essais.push(entierSaisi);
+
+      if (entierSaisi < this._entierAlea) {
+        console.log('Trop petit');
+        return this.jouer();
+      }
+
+      if (entierSaisi > this._entierAlea) {
+        console.log('Trop grand');
+        return this.jouer();
+      }
+
+      console.log('Gagné');
+      rl.close();
+    });
+  }
+}
 
 const jeu = new Jeu({
-  min: 5,
-  max: 10
+  max: 50
 });
 
-  jeu.jouer();
+
+
+jeu.jouer();

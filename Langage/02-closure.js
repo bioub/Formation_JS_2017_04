@@ -7,16 +7,18 @@ const logClosure = function (msg) {
 
 const logHello = logClosure('Hello');
 // ...
-logHello();
+logHello(); // Hello
 
 var Person = function (firstName) {
   this.hello = function () {
-    // firstName existe aussi grâce à la closure 
+    // firstName existe aussi grâce à la closure
+
     return 'Hello my name is ' + firstName;
   };
 };
 var instructor = new Person('Romain');
-console.log(instructor.hello()); // Hello my name is Romain 
+console.log(instructor.hello()); // Hello my name is Romain
+
 var toto = new Person('Toto');
 console.log(instructor.hello === toto.hello); // false
 

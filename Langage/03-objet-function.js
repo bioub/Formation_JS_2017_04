@@ -17,5 +17,5 @@ console.log(hello.call(contact, ...['Toto', 'Titi']));  // Bonjour je suis Eric
 
 // ES5
 const helloContact = hello.bind(contact);
-console.log(helloContact('Toto', 'Titi')); // Bonjour je suis Romain
+console.log(helloContact('Toto', 'Titi')); // Bonjour je suis Eric
 

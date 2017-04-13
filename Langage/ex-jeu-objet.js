@@ -26,8 +26,8 @@ const Random = {
 
 const Jeu = function(options) {
   options = options || {};
-  this._min = options.min || 0;
-  this._max = options.max || 100;
+  this._min = options.min || 0;
+  this._max = options.max || 100;
   this._entierAlea = Random.getIntInclusive(this._min, this._max);
   this._essais = [];
 };
@@ -68,4 +68,6 @@ const jeu = new Jeu({
   max: 10
 });
 
-  jeu.jouer();
+
+
+jeu.jouer();
