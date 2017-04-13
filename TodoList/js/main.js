@@ -1,6 +1,6 @@
 'use strict';
 
-import {getContactList} from './requetes';
+import {getTodoList, supprimerTodo, postTodo} from './requetes';
 
 const formAddElt = document.querySelector('.todolist-add-form');
 const listElt = document.querySelector('.todolist-list');
@@ -12,6 +12,7 @@ const ajouterTodo = function({id = 0, content = '', done = false} = {}) {
   divElt.classList.add('todolist-row'); // PAS IE8
   divElt.innerHTML = `<b>${content}</b>`;
   divElt.dataset.id = id;
+  // console.log(divElt.dataset.id);
 
   // Checkbox
   const checkboxElt = document.createElement('input');
@@ -24,7 +25,9 @@ const ajouterTodo = function({id = 0, content = '', done = false} = {}) {
   const btnMoinsElt = document.createElement('button');
   btnMoinsElt.innerText = '-';
   btnMoinsElt.addEventListener('click', function deleteCb() {
-    listElt.removeChild(divElt);
+    supprimerTodo(id, function() {
+      listElt.removeChild(divElt);
+    });
   });
   divElt.appendChild(btnMoinsElt);
 
@@ -43,7 +46,7 @@ const ajouterTodo = function({id = 0, content = '', done = false} = {}) {
 // xhr.send(json)
 
 
-getContactList(function(todos) {
+getTodoList(function(todos) {
   for (let todo of todos) {
     ajouterTodo(todo);
   }
@@ -64,10 +67,17 @@ formAddElt.addEventListener('submit', function submitCb(e) {
   e.preventDefault();
   // e.currentTarget; // l'élément qui a déclenché cet Event (ici c'est le form)
   const saisi = formAddElt.todo.value;
+  const newTodo = {
+    content: saisi,
+    done: false
+  };
 
-  ajouterTodo({
-    content: saisi
+
+
+  postTodo(newTodo, function(todo) {
+    ajouterTodo(todo);
   });
+
 });
 
 checkboxToggleElt.addEventListener('change', function toggleAllCb() {

@@ -93,6 +93,7 @@ var ajouterTodo = function ajouterTodo() {
   divElt.classList.add('todolist-row'); // PAS IE8
   divElt.innerHTML = '<b>' + content + '</b>';
   divElt.dataset.id = id;
+  // console.log(divElt.dataset.id);
 
   // Checkbox
   var checkboxElt = document.createElement('input');
@@ -105,7 +106,9 @@ var ajouterTodo = function ajouterTodo() {
   var btnMoinsElt = document.createElement('button');
   btnMoinsElt.innerText = '-';
   btnMoinsElt.addEventListener('click', function deleteCb() {
-    listElt.removeChild(divElt);
+    (0, _requetes.supprimerTodo)(id, function () {
+      listElt.removeChild(divElt);
+    });
   });
   divElt.appendChild(btnMoinsElt);
 
@@ -123,7 +126,7 @@ var ajouterTodo = function ajouterTodo() {
 // xhr.send(json)
 
 
-(0, _requetes.getContactList)(function (todos) {
+(0, _requetes.getTodoList)(function (todos) {
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
   var _iteratorError = undefined;
@@ -162,9 +165,13 @@ formAddElt.addEventListener('submit', function submitCb(e) {
   e.preventDefault();
   // e.currentTarget; // l'élément qui a déclenché cet Event (ici c'est le form)
   var saisi = formAddElt.todo.value;
+  var newTodo = {
+    content: saisi,
+    done: false
+  };
 
-  ajouterTodo({
-    content: saisi
+  (0, _requetes.postTodo)(newTodo, function (todo) {
+    ajouterTodo(todo);
   });
 });
 
@@ -218,7 +225,7 @@ checkboxToggleElt.addEventListener('change', function toggleAllCb() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var getContactList = exports.getContactList = function getContactList(cb) {
+var getTodoList = exports.getTodoList = function getTodoList(cb) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'http://localhost:3000/todos');
   xhr.onreadystatechange = function () {
@@ -229,6 +236,30 @@ var getContactList = exports.getContactList = function getContactList(cb) {
     }
   };
   xhr.send();
+};
+
+var supprimerTodo = exports.supprimerTodo = function supprimerTodo(id, cb) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('DELETE', 'http://localhost:3000/todos/' + id);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
+      cb();
+    }
+  };
+  xhr.send();
+};
+
+var postTodo = exports.postTodo = function postTodo(contactObj, cb) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'http://localhost:3000/todos');
+  xhr.setRequestHeader('Content-type', 'application/json'); // MIME Type
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
+      var newTodo = JSON.parse(xhr.responseText);
+      cb(newTodo);
+    }
+  };
+  xhr.send(JSON.stringify(contactObj));
 };
 
 /***/ })

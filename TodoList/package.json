@@ -11,7 +11,7 @@
     "lint": "eslint ./js",
     "build": "npm run lint && webpack",
     "build:dev": "webpack --watch",
-    "server": "json-server db.json"
+    "server": "json-server --watch db.json"
   },
   "dependencies": {
     "jquery": "^3.2.1"
