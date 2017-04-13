@@ -5,6 +5,6 @@
   'use strict';
 
   const div = document.querySelector('.horloge');
-  const horloge = new Horloge(div);
+  const horloge = new ORSystem.Horloge(div);
   horloge.start();
 }());

@@ -10,5 +10,8 @@
     "lint": "eslint ./js",
     "build": "npm run lint && webpack",
     "build:dev": "webpack --watch"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1"
   }
 }

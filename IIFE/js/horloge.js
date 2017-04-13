@@ -1,6 +1,8 @@
 (function() {
   'use strict';
 
+  const tmp  = '';
+
   class Horloge {
     constructor(container) {
       this.container = container;
@@ -15,5 +17,6 @@
     }
   }
 
-  window.Horloge = Horloge;
+  window.ORSystem = ORSystem || {};
+  ORSystem.Horloge = Horloge;
 }());

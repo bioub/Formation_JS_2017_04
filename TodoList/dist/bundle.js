@@ -75,6 +75,15 @@
 
 var formAddElt = document.querySelector('.todolist-add-form');
 var listElt = document.querySelector('.todolist-list');
+var checkboxToggleElt = document.querySelector('.todolist-toggle');
+
+/*
+const deleteCb = function (e) {
+  e.currentTarget.parentNode.parentNode.removeChild(
+    e.currentTarget.parentNode
+  );
+};
+*/
 
 formAddElt.addEventListener('submit', function submitCb(e) {
   e.preventDefault();
@@ -86,10 +95,53 @@ formAddElt.addEventListener('submit', function submitCb(e) {
   divElt.classList.add('todolist-row'); // PAS IE8
   divElt.innerHTML = '<b>' + saisi + '</b>';
 
+  // Checkbox
+  var checkboxElt = document.createElement('input');
+  checkboxElt.type = 'checkbox';
+  checkboxElt.className = 'todolist-done';
+  divElt.insertBefore(checkboxElt, divElt.firstElementChild);
+
+  // Bouton Moins
+  var btnMoinsElt = document.createElement('button');
+  btnMoinsElt.innerText = '-';
+  btnMoinsElt.addEventListener('click', function deleteCb() {
+    listElt.removeChild(divElt);
+  });
+  divElt.appendChild(btnMoinsElt);
+
   if (listElt.children.length) {
     listElt.insertBefore(divElt, listElt.firstElementChild);
   } else {
     listElt.appendChild(divElt);
+  }
+});
+
+checkboxToggleElt.addEventListener('change', function toggleAllCb() {
+  var checkboxes = listElt.querySelectorAll('.todolist-done');
+
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = checkboxes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var checkbox = _step.value;
+
+      checkbox.checked = checkboxToggleElt.checked;
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
   }
 });
 
@@ -101,7 +153,7 @@ formAddElt.addEventListener('submit', function submitCb(e) {
 // 2 - Ajouter une checkbox sur chaque ligne et une générale (dans le form)
 // * <input type="checkbox">
 // * Au click de la checkbox générale tout cocher/décocher
-// * Element.prototype.querySelectorAll() (retourne un NodeList (pas un Array))
+// * ParentNode.prototype.querySelectorAll() (retourne un NodeList (pas un Array))
 // * HTMLInputElement.checked = true (ou false pour décocher)
 
 /***/ })
