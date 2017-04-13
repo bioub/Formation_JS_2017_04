@@ -5,3 +5,4 @@ bower_components
 jspm_packages
 *.msi
 *.exe
+npm-debug.log
